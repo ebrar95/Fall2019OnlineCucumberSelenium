@@ -1,6 +1,7 @@
 package com.vytrack.pages.activities;
 
 
+
 import com.vytrack.pages.AbstractPageBase;
 import com.vytrack.utilities.BrowserUtilities;
 import org.openqa.selenium.By;
@@ -52,12 +53,14 @@ public class CalendarEventsPage extends AbstractPageBase {
     public void enterCalendarEventTitle(String titleValue) {
         BrowserUtilities.waitForPageToLoad(20);
         wait.until(ExpectedConditions.visibilityOf(title)).sendKeys(titleValue);
+        wait.until(ExpectedConditions.attributeToBe(title, "value", titleValue));
     }
 
     public void enterCalendarEventDescription(String description) {
         //wait until frame is available and switch to it
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(descriptionFrame));
         descriptionTextArea.sendKeys(description);
+        wait.until(ExpectedConditions.textToBePresentInElement(descriptionTextArea, description));
         driver.switchTo().defaultContent();//exit from the frame
     }
 
@@ -77,7 +80,7 @@ public class CalendarEventsPage extends AbstractPageBase {
         return generalInfoDescription.getText();
     }
 
-//#############################################################
+    //#############################################################
     public List<String> getColumnNames() {
         BrowserUtilities.waitForPageToLoad(20);
         return BrowserUtilities.getTextFromWebElements(columnNames);
