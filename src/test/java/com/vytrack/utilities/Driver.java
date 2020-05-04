@@ -1,10 +1,15 @@
 package com.vytrack.utilities;
 
+
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -52,6 +57,24 @@ public class Driver {
                     ChromeOptions options = new ChromeOptions();
                     options.setHeadless(true);
                     driverPool.set(new ChromeDriver(options));
+                    break;
+                case "chrome-remote":
+                    try {
+                        //we create object of URL and specify
+                        //selenium grid hub as a parameter
+                        //make sure it ends with /wd/hub
+                        URL url = new URL("http://54.152.48.96:4444//wd/hub");
+                        //desiredCapabilities used to specify what kind of node
+                        //is required for testing
+                        //such as: OS type, browser, version, etc...
+                        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+                        desiredCapabilities.setBrowserName(BrowserType.CHROME);
+                        desiredCapabilities.setPlatform(Platform.ANY);
+
+                        driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "firefox":
                     WebDriverManager.firefoxdriver().setup();
